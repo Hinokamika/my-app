@@ -48,12 +48,13 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <button
+            <Link
+              href="/auth/signIn"
               type="button"
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               Login
-            </button>
+            </Link>
             <button
               type="button"
               className="bg-purple-600 dark:bg-white text-white dark:text-black px-4 py-2 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity"
@@ -90,7 +91,7 @@ export default function Home() {
               <button className="bg-black text-white dark:bg-white dark:text-black px-5 py-2 font-semibold rounded-[10px] hover:opacity-80 transition-opacity">
                 Get Started for Free
               </button>
-              <button className="flex gap-2 border rounded-[10px] bg-transparent text-black dark:text-white px-4 py-2 font-semibold rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
+              <button className="flex gap-2 border rounded-[10px] bg-transparent text-black dark:text-white px-4 py-2 font-semibold hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
                 <CirclePlay className="text-purple-500"/>
                 View Demo
               </button>
@@ -152,8 +153,7 @@ export default function Home() {
               <Languages className="text-blue-600 w-10 h-10 bg-blue-100 p-2 rounded-[8px]" />
               <h2 className="text-xl font-bold">Multi-language support</h2>
               <p className="text-gray-500 dark:text-gray-400">
-                Write in multiple languages with our built-in language
-                translation tool.
+                Generate and translate content in over 25+ languages instantly to reach global audience.
               </p>
             </Card>
           </div>
