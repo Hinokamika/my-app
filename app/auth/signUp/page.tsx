@@ -31,7 +31,7 @@ export default function SignUp() {
         </div>
       </div>
       <div className="flex flex-1 flex-col justify-center items-center">
-        <Card className="w-full max-w-sm border-b-6 border-b-[#230FFF]">
+        <Card className="w-full max-w-sm border-t-6 border-t-[#230FFF]">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold tracking-tight">Create your account</CardTitle>
             <CardDescription className="text-balance text-[15px]">
