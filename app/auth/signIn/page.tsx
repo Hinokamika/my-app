@@ -1,19 +1,55 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@radix-ui/react-label"
-import { Brain, Github, RectangleGoggles } from "lucide-react"
-import Link from "next/link"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signIn, signInWithGithub, signInWithGoogle } from "@/lib/action/auth";
+import { Brain, Github, RectangleGoggles } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 export default function SignIn() {
+  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
+
+  async function handleSubmit(formData: FormData) {
+    setLoading(true);
+    setError(null);
+
+    const result = await signIn(formData);
+
+    if (result?.error) {
+      setError(result.error);
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setLoading(true);
+    const result = await signInWithGoogle();
+    if (result?.error) {
+      setError(result.error);
+      setLoading(false);
+    }
+  }
+
+  async function handleGithubSignIn() {
+    setLoading(true);
+    const result = await signInWithGithub();
+    if (result?.error) {
+      setError(result.error);
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col font-sans bg-[#FFDEFB]">
       <div className="w-full px-8 py-4 flex items-center justify-between">
@@ -24,7 +60,7 @@ export default function SignIn() {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <p>Don't have an account?</p>
+          <p>Don&apos;t have an account?</p>
           <Link href="/auth/signUp" className="ml-2 text-purple-600">
             Sign Up
           </Link>
@@ -33,18 +69,21 @@ export default function SignIn() {
       <div className="flex flex-1 flex-col justify-center items-center">
         <Card className="w-full max-w-sm border-b-6 border-b-[#230FFF]">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold tracking-tight">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              Welcome back
+            </CardTitle>
             <CardDescription className="text-balance text-[15px]">
               Enter your details to access your AI workspace
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form>
+          <form action={handleSubmit}>
+            <CardContent>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="m@example.com"
                     required
@@ -60,36 +99,60 @@ export default function SignIn() {
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                  />
                 </div>
               </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full bg-purple-600 dark:bg-white text-white dark:text-black">
-              Sign In
-            </Button>
-            <div className="relative my-2 w-full">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+            </CardContent>
+            <CardFooter className="flex-col gap-2 mt-5">
+              <Button
+                type="submit"
+                className="w-full bg-purple-600 dark:bg-white text-white dark:text-black"
+                disabled={loading}
+              >
+                {loading ? "Signing in..." : "Sign In"}
+              </Button>
+              {error && (
+                <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">
+                  {error}
+                </div>
+              )}
+              <div className="relative my-2 w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <Button variant="outline" className="w-full">
-              <Github />
-              Login with Github
-            </Button>
-            <Button variant="outline" className="w-full">
-            <RectangleGoggles />
-              Login with Google
-            </Button>
-          </CardFooter>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleGithubSignIn}
+                disabled={loading}
+              >
+                <Github />
+                Login with Github
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+              >
+                <RectangleGoggles />
+                Login with Google
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </div>
     </div>
-  )
+  );
 }
