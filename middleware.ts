@@ -80,7 +80,7 @@ export async function middleware(request: NextRequest) {
       request.nextUrl.pathname.startsWith("/auth/signUp")) &&
     user
   ) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/welcome", request.url));
   }
 
   return response;
