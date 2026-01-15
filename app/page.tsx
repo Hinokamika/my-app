@@ -53,14 +53,15 @@ export default function Home() {
               type="button"
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
-              Login
+              Sign In
             </Link>
-            <button
+            <Link
+              href="/auth/signUp"
               type="button"
               className="bg-purple-600 dark:bg-white text-white dark:text-black px-4 py-2 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity"
             >
               Sign Up
-            </button>
+            </Link>
           </div>
         </div>
       </header>

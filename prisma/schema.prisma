@@ -31,6 +31,7 @@ model User {
   onboardingCompleted Boolean  @default(false)
   contentTypes        String[] @default([]) // ["BLOG_POST", "SOCIAL_MEDIA", etc.]
   primaryGoal         String? // What they want to achieve
+  mostFrequentContent String? // What they create most often
   onboardingStep      Int      @default(0) // Track which step they're on (0-3)
 
   // Subscription

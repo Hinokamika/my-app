@@ -67,20 +67,11 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protected routes - require authentication
-  if (request.nextUrl.pathname.startsWith("/dashboard") && !user) {
+  if (request.nextUrl.pathname.startsWith("/welcome") && !user) {
     const redirectUrl = new URL("/auth/signIn", request.url);
     // Add redirect parameter to return user after login
     redirectUrl.searchParams.set("redirectTo", request.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);
-  }
-
-  // Auth routes - redirect if already logged in
-  if (
-    (request.nextUrl.pathname.startsWith("/auth/signIn") ||
-      request.nextUrl.pathname.startsWith("/auth/signUp")) &&
-    user
-  ) {
-    return NextResponse.redirect(new URL("/welcome", request.url));
   }
 
   return response;
