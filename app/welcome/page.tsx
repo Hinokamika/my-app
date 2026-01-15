@@ -8,9 +8,9 @@ export default async function WelcomePage() {
     redirect("/auth/signIn")
   }
 
-  if (user.onboardingCompleted) {
-    redirect("/dashboard")
-  }
+  // if (user.onboardingCompleted) {
+  //   redirect("/dashboard")
+  // }
 
   if (user.onboardingStep === 0) {
     redirect("/welcome/step1")

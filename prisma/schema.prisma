@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -10,58 +8,64 @@ datasource db {
   provider = "postgresql"
 }
 
-// ============================================
-// USER & AUTHENTICATION
-// ============================================
-
 model User {
-  id String @id @default(cuid())
-
-  // Supabase auth reference
-  supabaseId String @unique
-  email      String @unique
-
-  // Profile
-  name     String?
-  username String? @unique
-  imageUrl String?
-  bio      String? @db.Text
-
-  // Onboarding Data (NEW - for welcome pages)
-  onboardingCompleted Boolean  @default(false)
-  contentTypes        String[] @default([]) // ["BLOG_POST", "SOCIAL_MEDIA", etc.]
-  primaryGoal         String? // What they want to achieve
-  mostFrequentContent String? // What they create most often
-  onboardingStep      Int      @default(0) // Track which step they're on (0-3)
-
-  // Subscription
+  id                   String             @id @default(cuid())
+  supabaseId           String             @unique
+  email                String             @unique
+  name                 String?
+  username             String?            @unique
+  imageUrl             String?
+  bio                  String?
   subscriptionTier     SubscriptionTier   @default(FREE)
   subscriptionStatus   SubscriptionStatus @default(ACTIVE)
   stripeCustomerId     String?            @unique
   stripeSubscriptionId String?            @unique
-
-  // Credits
-  credits         Int      @default(10)
-  creditsUsed     Int      @default(0)
-  lastCreditReset DateTime @default(now())
-
-  // User Preferences
-  defaultTone       ContentTone?
-  defaultWordCount  Int?         @default(800)
-  preferredLanguage String       @default("en")
-
-  // Timestamps
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  lastLoginAt DateTime?
-
-  // Relations
-  contents     Content[]
-  usageHistory UsageHistory[]
+  credits              Int                @default(10)
+  creditsUsed          Int                @default(0)
+  lastCreditReset      DateTime           @default(now())
+  defaultTone          ContentTone?
+  defaultWordCount     Int?               @default(800)
+  preferredLanguage    String             @default("en")
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  lastLoginAt          DateTime?
+  contentTypes         String[]           @default([])
+  onboardingCompleted  Boolean            @default(false)
+  onboardingStep       Int                @default(0)
+  primaryGoal          String?
+  mostFrequentContent  String?
+  contents             Content[]
+  usageHistory         UsageHistory[]
 
   @@index([supabaseId])
   @@index([email])
   @@index([onboardingCompleted])
+}
+
+model Content {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  content   String
+  wordCount Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tone      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UsageHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  tokensUsed  Int?
+  creditsUsed Int      @default(1)
+  createdAt   DateTime @default(now())
+  action      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum SubscriptionTier {
@@ -84,42 +88,4 @@ enum ContentTone {
   TECHNICAL
   PERSUASIVE
   EDUCATIONAL
-}
-
-// ============================================
-// CONTENT MODEL (Keep for later)
-// ============================================
-
-model Content {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  title     String
-  content   String  @db.Text
-  tone      String?
-  wordCount Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-}
-
-// ============================================
-// USAGE HISTORY (Keep for later)
-// ============================================
-
-model UsageHistory {
-  id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  action      String
-  tokensUsed  Int?
-  creditsUsed Int    @default(1)
-
-  createdAt DateTime @default(now())
-
-  @@index([userId])
 }

@@ -36,7 +36,6 @@ export async function submitStep1(primaryGoal: string, mostFrequentContent: stri
     where: { supabaseId: user.id },
     data: {
       primaryGoal,
-      // @ts-ignore
       mostFrequentContent,
       onboardingStep: 1,
     },
@@ -90,5 +89,5 @@ export async function completeOnboarding(data: {
   });
 
   revalidatePath("/");
-  redirect("/dashboard");
+  redirect("/welcome/finish");
 }
